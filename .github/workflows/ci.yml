@@ -28,35 +28,35 @@ jobs:
         run: chmod +x gradlew
       - name: build-with-gradle
         run: ./gradlew build
-      - name: upload-build-dir
-        uses: actions/upload-artifact@v2
-        with:
-          name: build-dir
-          path: |
-            build/libs
-            docker/
-          retention-days: 7
+#      - name: upload-build-dir
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: build-dir
+#          path: |
+#            build/libs
+#            docker/
+#          retention-days: 7
       - name: run-tests
         run: ./gradlew test
-      - name: upload-test-results-dir
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results-dir
-          path: build/test-results/
-          retention-days: 7
-  publish-test-results:
-    runs-on: ubuntu-18.04
-    needs: build-test
-    steps:
-      - name: download-test-results
-        uses: actions/download-artifact@v2
-        with:
-          name: test-results-dir
-          path: build/test-results/  # keep the same structure everywhere
-      - name: publish-test-results
-        uses: EnricoMi/publish-unit-test-result-action@v1.6
-        if: always() # guarantees that this action always runs, even if earlier steps (e.g., the unit test step) in your workflow fail.
-        with:
-          report_individual_runs: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          files: build/test-results/**/*.xml
+#      - name: upload-test-results-dir
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: test-results-dir
+#          path: build/test-results/
+#          retention-days: 7
+#  publish-test-results:
+#    runs-on: ubuntu-18.04
+#    needs: build-test
+#    steps:
+#      - name: download-test-results
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: test-results-dir
+#          path: build/test-results/  # keep the same structure everywhere
+#      - name: publish-test-results
+#        uses: EnricoMi/publish-unit-test-result-action@v1.6
+#        if: always() # guarantees that this action always runs, even if earlier steps (e.g., the unit test step) in your workflow fail.
+#        with:
+#          report_individual_runs: true
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          files: build/test-results/**/*.xml
