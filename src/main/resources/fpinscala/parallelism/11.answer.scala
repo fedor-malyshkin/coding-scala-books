@@ -1,4 +1,4 @@
-def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] = 
+def choiceN[A](n: Par[Int])(choices: List[Par[A]]): Par[A] =
   es => {
     val ind = run(es)(n).get // Full source files
     run(es)(choices(ind))

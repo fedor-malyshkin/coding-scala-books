@@ -16,10 +16,11 @@ object Monoid {
     val zero = ""
   }
 
-  def listMonoid[A] = new Monoid[List[A]] {
-    def op(a1: List[A], a2: List[A]) = a1 ++ a2
-    val zero = Nil
-  }
+  def listMonoid[A] =
+    new Monoid[List[A]] {
+      def op(a1: List[A], a2: List[A]) = a1 ++ a2
+      val zero = Nil
+    }
 
   val intAddition: Monoid[Int] = ???
 
@@ -68,23 +69,23 @@ object Monoid {
   case class Stub(chars: String) extends WC
   case class Part(lStub: String, words: Int, rStub: String) extends WC
 
-  def par[A](m: Monoid[A]): Monoid[Par[A]] = 
+  def par[A](m: Monoid[A]): Monoid[Par[A]] =
     ???
 
-  def parFoldMap[A,B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] = 
+  def parFoldMap[A, B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] =
     ???
 
   val wcMonoid: Monoid[WC] = ???
 
   def count(s: String): Int = ???
 
-  def productMonoid[A,B](A: Monoid[A], B: Monoid[B]): Monoid[(A, B)] =
+  def productMonoid[A, B](A: Monoid[A], B: Monoid[B]): Monoid[(A, B)] =
     ???
 
-  def functionMonoid[A,B](B: Monoid[B]): Monoid[A => B] =
+  def functionMonoid[A, B](B: Monoid[B]): Monoid[A => B] =
     ???
 
-  def mapMergeMonoid[K,V](V: Monoid[V]): Monoid[Map[K, V]] =
+  def mapMergeMonoid[K, V](V: Monoid[V]): Monoid[Map[K, V]] =
     ???
 
   def bag[A](as: IndexedSeq[A]): Map[A, Int] =
@@ -156,4 +157,3 @@ object OptionFoldable extends Foldable[Option] {
   override def foldRight[A, B](as: Option[A])(z: B)(f: (A, B) => B) =
     ???
 }
-

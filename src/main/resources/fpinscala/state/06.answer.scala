@@ -6,7 +6,7 @@
 // always get two of the same `Int` in the result. When implementing functions
 // like this, it's important to consider how we would test them for
 // correctness.
-def map2[A,B,C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
+def map2[A, B, C](ra: Rand[A], rb: Rand[B])(f: (A, B) => C): Rand[C] =
   rng => {
     val (a, r1) = ra(rng)
     val (b, r2) = rb(r1)

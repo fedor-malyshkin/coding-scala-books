@@ -28,14 +28,14 @@ jobs:
         run: chmod +x gradlew
       - name: build-with-gradle
         run: ./gradlew build
-#      - name: upload-build-dir
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: build-dir
-#          path: |
-#            build/libs
-#            docker/
-#          retention-days: 7
+      #      - name: upload-build-dir
+      #        uses: actions/upload-artifact@v2
+      #        with:
+      #          name: build-dir
+      #          path: |
+      #            build/libs
+      #            docker/
+      #          retention-days: 7
       - name: run-tests
         run: ./gradlew test
 #      - name: upload-test-results-dir

@@ -1,2 +1,2 @@
 def from(n: Int): Stream[Int] =
-  cons(n, from(n+1))
+  cons(n, from(n + 1))

@@ -1,70 +1,97 @@
-ext {
-// scala
-	SCALA_VER = '2.13'
-	SCALA_LIBRARY_VER = '2.13.5'
-
-	CATS_VER = '2.3.1'
-	CATS_EFFECT_VER = CATS_VER
-
-
-// test scala
-	SCALA_TEST_VER = '3.2.5'
-	SCALA_MOCK_VER = '5.0.0'
-
-// test
-	TEST_JUNIT_VER = '4.12'
-	TEST_MOCKITO_VER = '2.21.0'
-	TEST_ASSERTJ_VER = '3.11.0'
-	TEST_JSONASSERT_VER = '1.5.0'
-}
-
 // project dependencies
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			url "https://plugins.gradle.org/m2/"
-		}
-	}
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
 
-	dependencies {
-		// scalatest plugin
-		classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.30"
-	}
+    dependencies {
+        // scalatest plugin
+        classpath "gradle.plugin.com.github.maiflai:gradle-scalatest:0.30"
+    }
 }
+
+plugins {
+    id "com.diffplug.spotless" version "5.12.4"
+}
+
 
 apply plugin: 'scala'
 apply plugin: "com.github.maiflai.scalatest"
+
+
+ext {
+// scala
+    SCALA_VER = '2.13'
+    SCALA_LIBRARY_VER = '2.13.5'
+
+    CATS_VER = '2.3.1'
+    CATS_EFFECT_VER = CATS_VER
+
+
+// test scala
+    SCALA_TEST_VER = '3.2.5'
+    SCALA_MOCK_VER = '5.0.0'
+
+// test
+    TEST_JUNIT_VER = '4.12'
+    TEST_MOCKITO_VER = '2.21.0'
+    TEST_ASSERTJ_VER = '3.11.0'
+    TEST_JSONASSERT_VER = '1.5.0'
+}
+
 
 java {
 //    toolchain {
 //        languageVersion = JavaLanguageVersion.of(13)
 //    }
-	sourceCompatibility = JavaVersion.VERSION_15
-	targetCompatibility = JavaVersion.VERSION_15
+    sourceCompatibility = JavaVersion.VERSION_15
+    targetCompatibility = JavaVersion.VERSION_15
 }
 
 
 repositories {
-	mavenCentral()
-	mavenLocal()
+    mavenCentral()
+    mavenLocal()
 }
 
 test.dependsOn('scalatest')
 
 dependencies {
-	implementation "org.scala-lang:scala-library:${SCALA_LIBRARY_VER}"
+    implementation "org.scala-lang:scala-library:${SCALA_LIBRARY_VER}"
 
-	// Cats
-	implementation "org.typelevel:cats-core_${SCALA_VER}:${CATS_VER}"
-	implementation "org.typelevel:cats-effect_${SCALA_VER}:${CATS_EFFECT_VER}"
+    // Cats
+    implementation "org.typelevel:cats-core_${SCALA_VER}:${CATS_VER}"
+    implementation "org.typelevel:cats-effect_${SCALA_VER}:${CATS_EFFECT_VER}"
 
-	// testing (scala)
-	testImplementation "org.scalatest:scalatest_${SCALA_VER}:${SCALA_TEST_VER}"
-	testImplementation "org.scalamock:scalamock_${SCALA_VER}:${SCALA_MOCK_VER}"
-	testImplementation 'com.vladsch.flexmark:flexmark-all:0.36.8'
+    // testing (scala)
+    testImplementation "org.scalatest:scalatest_${SCALA_VER}:${SCALA_TEST_VER}"
+    testImplementation "org.scalamock:scalamock_${SCALA_VER}:${SCALA_MOCK_VER}"
+    testImplementation 'com.vladsch.flexmark:flexmark-all:0.36.8'
 
-	testImplementation "junit:junit:${TEST_JUNIT_VER}"
-	testImplementation "org.mockito:mockito-core:${TEST_MOCKITO_VER}"
-	testImplementation "org.assertj:assertj-core:${TEST_ASSERTJ_VER}"
+    testImplementation "junit:junit:${TEST_JUNIT_VER}"
+    testImplementation "org.mockito:mockito-core:${TEST_MOCKITO_VER}"
+    testImplementation "org.assertj:assertj-core:${TEST_ASSERTJ_VER}"
+}
+
+
+spotless {
+    scala {
+        // by default, all `.scala` and `.sc` files in the java sourcesets will be formatted
+
+        // version and configFile are both optional
+        scalafmt('3.0.0-RC1').configFile('.scalafmt.conf')
+
+        target project.fileTree(project.projectDir) {
+            include '**/*.scala'
+            exclude 'build/**'
+            exclude 'target/**'
+            exclude 'src/answers/**'
+            exclude 'src/main/resources/**'
+            exclude 'src/test/resources/**'
+
+        }
+    }
 }

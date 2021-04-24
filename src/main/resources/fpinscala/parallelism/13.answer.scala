@@ -1,11 +1,11 @@
-def chooser[A,B](p: Par[A])(choices: A => Par[B]): Par[B] = 
+def chooser[A, B](p: Par[A])(choices: A => Par[B]): Par[B] =
   es => {
     val k = run(es)(p).get
     run(es)(choices(k))
   }
 
 /* `chooser` is usually called `flatMap` or `bind`. */
-def flatMap[A,B](p: Par[A])(choices: A => Par[B]): Par[B] = 
+def flatMap[A, B](p: Par[A])(choices: A => Par[B]): Par[B] =
   es => {
     val k = run(es)(p).get
     run(es)(choices(k))

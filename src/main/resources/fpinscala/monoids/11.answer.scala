@@ -6,7 +6,7 @@ def count(s: String): Int = {
       Stub(c.toString)
   def unstub(s: String) = s.length min 1
   foldMapV(s.toIndexedSeq, wcMonoid)(wc) match {
-    case Stub(s) => unstub(s)
+    case Stub(s)       => unstub(s)
     case Part(l, w, r) => unstub(l) + w + unstub(r)
   }
 }
