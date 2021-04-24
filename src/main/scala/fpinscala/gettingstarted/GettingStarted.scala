@@ -1,4 +1,5 @@
 package fpinscala.gettingstarted
+import scala.annotation.tailrec
 
 // A comment!
 /* Another comment */
@@ -35,8 +36,15 @@ object MyModule {
   }
 
   // Exercise 1: Write a function to compute the nth fibonacci number
+  def fib(n: Int): Int = {
+    @tailrec
+    def fibMy(current: Int, prev: Int, prePrev: Int): Int = current match {
+      case 1 => prev
+      case _ => fibMy(current - 1, prev + prePrev, prev)
+    }
 
-  def fib(n: Int): Int = ???
+    fibMy(n, 0, 1);
+  }
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = {
@@ -46,7 +54,7 @@ object MyModule {
 
   // We can generalize `formatAbs` and `formatFactorial` to
   // accept a _function_ as a parameter
-  def formatResult(name: String, n: Int, f: Int => Int) = {
+  def formatResult(name: String, n: Int, f: Int => Int): String = {
     val msg = "The %s of %d is %d."
     msg.format(name, n, f(n))
   }
@@ -150,7 +158,16 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A, A) => Boolean): Boolean = {
+    @tailrec
+    def isSortedInternal(el: A, arr: IndexedSeq[A]): Boolean = {
+      if (arr.isEmpty) return true
+      if (gt(el, arr.head)) isSortedInternal(arr.head, arr.tail)
+      else return false
+    }
+
+    isSortedInternal(as.head, as.tail)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:

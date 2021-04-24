@@ -85,13 +85,8 @@ spotless {
         scalafmt('3.0.0-RC1').configFile('.scalafmt.conf')
 
         target project.fileTree(project.projectDir) {
-            include '**/*.scala'
-            exclude 'build/**'
-            exclude 'target/**'
-            exclude 'src/answers/**'
-            exclude 'src/main/resources/**'
-            exclude 'src/test/resources/**'
-
+            include 'src/main/scala/**/*.scala'
+            include 'src/test/scala/**/*.scala'
         }
     }
 }
