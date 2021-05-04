@@ -4,7 +4,7 @@ import scala.annotation.tailrec
 
 sealed trait List[+A] // `List` data type, parameterized on a type, `A`
 
-case object Nil extends List[Nothing] // A `List` data constructor representing the empty list
+object Nil extends List[Nothing] // A `List` data constructor representing the empty list
 
 /* Another data constructor, representing nonempty lists. Note that `tail` is another `List[A]`,
 which may be `Nil` or another `Cons`.
