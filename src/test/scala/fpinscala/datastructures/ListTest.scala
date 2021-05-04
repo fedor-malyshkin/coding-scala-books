@@ -92,4 +92,44 @@ class ListTest extends AnyFunSuite {
     val list = Cons(1, Cons(2, Cons(3, Nil)))
     List.addOne(list) should be(Cons(2, Cons(3, Cons(4, Nil))))
   }
+
+  test("[3.17] List[Double] into a String") {
+    val list = Cons(1.0, Cons(2.0, Cons(3.0, Nil)))
+    List.doubleToString(list) should be(Cons("1.0", Cons("2.0", Cons("3.0", Nil))))
+  }
+
+  test("[3.18] map") {
+    val list = Cons(1.0, Cons(2.0, Cons(3.0, Nil)))
+    List.map(list)(_.toString) should be(Cons("1.0", Cons("2.0", Cons("3.0", Nil))))
+  }
+
+  test("[3.19] filter") {
+    val list = Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Nil)))))
+    List.filter(list)(_ % 2 != 0) should be(Cons(1, Cons(3, Cons(5, Nil))))
+    List.filter2(list)(_ % 2 != 0) should be(Cons(1, Cons(3, Cons(5, Nil))))
+  }
+
+  test("[3.20] flatMap") {
+    val list = Cons(4, Cons(5, Nil))
+    List.flatMap(list)(l => Cons(l, Cons(l, Nil))) should be(
+      Cons(4, Cons(4, Cons(5, Cons(5, Nil))))
+    )
+  }
+
+  test("[3.21] filter by flatMap") {
+    val list = Cons(1, Cons(2, Cons(3, Cons(4, Cons(5, Nil)))))
+    List.filterByFlatMap(list)(_ % 2 != 0) should be(Cons(1, Cons(3, Cons(5, Nil))))
+  }
+
+  test("[3.22] zip") {
+    val list1 = Cons(1, Cons(2, Nil))
+    val list2 = Cons(4, Cons(5, Nil))
+    List.zipInt(list1, list2) should be(Cons(5, Cons(7, Nil)))
+  }
+
+  test("[3.23] zipWith") {
+    val list1 = Cons(1, Cons(2, Nil))
+    val list2 = Cons(4, Cons(5, Nil))
+    List.zipWith(list1, list2)(_ + _) should be(Cons(5, Cons(7, Nil)))
+  }
 }

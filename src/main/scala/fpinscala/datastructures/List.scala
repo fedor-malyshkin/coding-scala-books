@@ -111,5 +111,39 @@ object List {
 
   def addOne(xs: List[Int]): List[Int] = foldRight(xs, Nil: List[Int])((e, a) => Cons(e + 1, a))
 
-  def map[A, B](l: List[A])(f: A => B): List[B] = ???
+  def doubleToString(xs: List[Double]): List[String] =
+    foldRight(xs, Nil: List[String])((e, a) => Cons(e.toString, a))
+
+  def map[A, B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil: List[B])((e, a) => Cons(f(e), a))
+
+  def filter[A](l: List[A])(f: A => Boolean): List[A] = l match {
+    case Nil                => Nil
+    case Cons(h, t) if f(h) => Cons(h, filter(t)(f))
+    case Cons(h, t)         => filter(t)(f)
+  }
+
+  def filter2[A](l: List[A])(f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((e, acc) => if (f(e)) Cons(e, acc) else acc)
+
+  def flatMap[A, B](l: List[A])(f: A => List[B]): List[B] =
+    concat(map(l)(f))
+
+  def filterByFlatMap[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l)(e => if (f(e)) Cons(e, Nil) else Nil)
+
+  def zipInt(a: List[Int], b: List[Int]): List[Int] =
+    (a, b) match {
+      case (Nil, _)                     => Nil
+      case (_, Nil)                     => Nil
+      case (Cons(e1, t1), Cons(e2, t2)) => Cons(e1 + e2, zipInt(t1, t2))
+    }
+
+  def zipWith[A, B](a: List[A], b: List[A])(f: (A, A) => B): List[B] =
+    (a, b) match {
+      case (Nil, _)                     => Nil
+      case (_, Nil)                     => Nil
+      case (Cons(e1, t1), Cons(e2, t2)) => Cons(f(e1, e2), zipWith(t1, t2)(f))
+    }
+
 }
