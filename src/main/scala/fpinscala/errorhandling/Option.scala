@@ -49,17 +49,32 @@ object Option {
       x + ((throw new Exception(
         "fail!"
       )): Int) // A thrown Exception can be given any type; here we're annotating it with the type `Int`
-    } catch { case e: Exception => 43 }
+    } catch {
+      case e: Exception => 43
+    }
   }
 
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
-  def variance(xs: Seq[Double]): Option[Double] = ???
 
-  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = ???
+  def variance(xs: Seq[Double]): Option[Double] =
+    mean(xs) flatMap (mn => mean(xs.map(e => Math.pow(e - mn, 2))))
 
-  def sequence[A](a: List[Option[A]]): Option[List[A]] = ???
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a.flatMap(v => b.map(f(v, _)))
 
-  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] = ???
+  def sequence[A](a: List[Option[A]]): Option[List[A]] =
+    a.foldRight[Option[List[A]]](Some(List()))((el, acc) =>
+      acc.flatMap(accEl => el.map(accEl :+ _))
+    )
+
+  def traverse[A, B](a: List[A])(f: A => Option[B]): Option[List[B]] =
+    a.foldRight[Option[List[B]]](Some(List()))((el, acc) =>
+      acc.flatMap(accEl => f(el).map(accEl :+ _))
+    )
+
+  def tryIt[A](a: => A): Option[A] =
+    try Some(a)
+    catch { case e: Exception => None }
 }
