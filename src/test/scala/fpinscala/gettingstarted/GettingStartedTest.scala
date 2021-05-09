@@ -1,14 +1,12 @@
-package fpinscala
-import fpinscala.gettingstarted.{MyModule, PolymorphicFunctions}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+package fpinscala.gettingstarted
+
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.must.Matchers.be
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 
-class GettingStartedTest extends AnyFlatSpec with Matchers {
+class GettingStartedTest extends AnyFunSuite {
 
-  behavior of "GettingStartedTest"
-
-  it should "EXERCISE 2.1" in {
+  test("[2.1] ") {
     MyModule.fib(2) should be(1)
     MyModule.fib(3) should be(1)
     MyModule.fib(4) should be(2)
@@ -16,11 +14,10 @@ class GettingStartedTest extends AnyFlatSpec with Matchers {
     MyModule.fib(6) should be(5)
   }
 
-  it should "EXERCISE 2.2" in {
+  test("[2.2]") {
     def isGreater(first: Int, second: Int): Boolean = first >= second
 
     PolymorphicFunctions.isSorted(Array(6, 5, 4, 3, 2, 1), isGreater) should be(true)
-
     PolymorphicFunctions.isSorted(Array(6, 5, 4, 2, 3, 1), isGreater) should be(false)
   }
 }
