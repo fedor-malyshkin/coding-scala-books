@@ -3,6 +3,8 @@ package fpinscala.laziness
 import Stream._
 trait Stream[+A] {
 
+  def toList: List[A] = foldRight(List[A]())((el, acc) => el :: acc)
+
   def foldRight[B](
     z: => B
   )(
