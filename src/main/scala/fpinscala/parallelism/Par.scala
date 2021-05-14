@@ -1,7 +1,8 @@
 package fpinscala.parallelism
 
 import java.util.concurrent._
-import language.implicitConversions
+
+import scala.language.implicitConversions
 
 object Par {
   type Par[A] = ExecutorService => Future[A]
@@ -13,6 +14,8 @@ object Par {
       UnitFuture(
         a
       ) // `unit` is represented as a function that returns a `UnitFuture`, which is a simple implementation of `Future` that just wraps a constant value. It doesn't use the `ExecutorService` at all. It's always done and can't be cancelled. Its `get` method simply returns the value that we gave it.
+
+  def lazyUnit[A](a: => A): Par[A] = fork(unit(a))
 
   private case class UnitFuture[A](get: A) extends Future[A] {
     def isDone = true
@@ -46,7 +49,51 @@ object Par {
   def map[A, B](pa: Par[A])(f: A => B): Par[B] =
     map2(pa, unit(()))((a, _) => f(a))
 
+  /* This version respects timeouts. See `Map2Future` below. */
+  def map2Timeout[A, B, C](a: Par[A], b: Par[B])(f: (A, B) => C): Par[C] =
+    es => {
+      val (af, bf) = (a(es), b(es))
+      Map2Future(af, bf, f)
+    }
+
+  /*
+  Note: this implementation will not prevent repeated evaluation if multiple threads call `get` in parallel. We could prevent this using synchronization, but it isn't needed for our purposes here (also, repeated evaluation of pure values won't affect results).
+   */
+  case class Map2Future[A, B, C](a: Future[A], b: Future[B], f: (A, B) => C) extends Future[C] {
+    @volatile var cache: Option[C] = None
+    def isDone = cache.isDefined
+    def isCancelled = a.isCancelled || b.isCancelled
+    def cancel(evenIfRunning: Boolean) =
+      a.cancel(evenIfRunning) || b.cancel(evenIfRunning)
+    def get = compute(Long.MaxValue)
+    def get(timeout: Long, units: TimeUnit): C =
+      compute(TimeUnit.NANOSECONDS.convert(timeout, units))
+
+    private def compute(timeoutInNanos: Long): C =
+      cache match {
+        case Some(c) => c
+        case None =>
+          val start = System.nanoTime
+          val ar = a.get(timeoutInNanos, TimeUnit.NANOSECONDS)
+          val stop = System.nanoTime; val aTime = stop - start
+          val br = b.get(timeoutInNanos - aTime, TimeUnit.NANOSECONDS)
+          val ret = f(ar, br)
+          cache = Some(ret)
+          ret
+      }
+  }
+
+  def asyncF[A, B](f: A => B): A => Par[B] = a => lazyUnit(f(a))
+
   def sortPar(parList: Par[List[Int]]) = map(parList)(_.sorted)
+
+  def parMap[A, B](ps: List[A])(f: A => B): Par[List[B]] = {
+    val fbs: List[Par[B]] = ps.map(asyncF(f))
+    sequence(fbs)
+  }
+
+  def sequence[A](l: List[Par[A]]): Par[List[A]] =
+    l.foldRight[Par[List[A]]](unit(List()))((h, t) => map2(h, t)(_ :: _))
 
   def equal[A](e: ExecutorService)(p: Par[A], p2: Par[A]): Boolean =
     p(e).get == p2(e).get
@@ -67,7 +114,6 @@ object Par {
 }
 
 object Examples {
-  import Par._
   def sum(
     ints: IndexedSeq[Int]
   ): Int = // `IndexedSeq` is a superclass of random-access sequences like `Vector` in the standard library. Unlike lists, these sequences provide an efficient `splitAt` method for dividing them into two parts at a particular index.
