@@ -6,6 +6,7 @@ import fpinscala.parallelism.Nonblocking._
 
 trait Monoid[A] {
   def op(a1: A, a2: A): A
+
   def zero: A
 }
 
@@ -13,26 +14,52 @@ object Monoid {
 
   val stringMonoid = new Monoid[String] {
     def op(a1: String, a2: String) = a1 + a2
+
     val zero = ""
   }
 
   def listMonoid[A] =
     new Monoid[List[A]] {
       def op(a1: List[A], a2: List[A]) = a1 ++ a2
+
       val zero = Nil
     }
 
-  val intAddition: Monoid[Int] = ???
+  val intAddition: Monoid[Int] = new Monoid[Int] {
+    def op(a1: Int, a2: Int): Int = a1 + a2
 
-  val intMultiplication: Monoid[Int] = ???
+    val zero = 0
+  }
 
-  val booleanOr: Monoid[Boolean] = ???
+  val intMultiplication: Monoid[Int] = new Monoid[Int] {
+    def op(a1: Int, a2: Int): Int = a1 * a2
 
-  val booleanAnd: Monoid[Boolean] = ???
+    val zero = 1
+  }
 
-  def optionMonoid[A]: Monoid[Option[A]] = ???
+  val booleanOr: Monoid[Boolean] = new Monoid[Boolean] {
+    def op(a1: Boolean, a2: Boolean): Boolean = a1 || a2
 
-  def endoMonoid[A]: Monoid[A => A] = ???
+    val zero = false
+  }
+
+  val booleanAnd: Monoid[Boolean] = new Monoid[Boolean] {
+    def op(a1: Boolean, a2: Boolean): Boolean = a1 && a2
+
+    val zero = true
+  }
+
+  def optionMonoid[A]: Monoid[Option[A]] = new Monoid[Option[A]] {
+    def op(x: Option[A], y: Option[A]) = x orElse y
+
+    val zero = None
+  }
+
+  def endoMonoid[A]: Monoid[A => A] = new Monoid[A => A] {
+    def op(x: A => A, y: A => A) = x compose y
+
+    val zero = a => a
+  }
 
   // TODO: Placeholder for `Prop`. Remove once you have implemented the `Prop`
   // data type from Part 2.
@@ -42,6 +69,7 @@ object Monoid {
   // data type from Part 2.
 
   import fpinscala.testing._
+
   def monoidLaws[A](m: Monoid[A], gen: Gen[A]): Prop = ???
 
   def trimMonoid(s: String): Monoid[String] = ???
@@ -50,7 +78,7 @@ object Monoid {
     ???
 
   def foldMap[A, B](as: List[A], m: Monoid[B])(f: A => B): B =
-    ???
+    as.foldLeft(m.zero)((acc, el) => m.op(acc, f(el)))
 
   def foldRight[A, B](as: List[A])(z: B)(f: (A, B) => B): B =
     ???
@@ -59,7 +87,13 @@ object Monoid {
     ???
 
   def foldMapV[A, B](as: IndexedSeq[A], m: Monoid[B])(f: A => B): B =
-    ???
+    as.length match {
+      case 0 => m.zero
+      case 1 => f(as.head)
+      case _ =>
+        val (l, r) = as.splitAt(as.length / 2)
+        m.op(foldMapV(l, m)(f), foldMapV(r, m)(f))
+    }
 
   def ordered(ints: IndexedSeq[Int]): Boolean =
     ???
@@ -76,7 +110,7 @@ object Monoid {
   def parFoldMap[A, B](v: IndexedSeq[A], m: Monoid[B])(f: A => B): Par[B] =
     ???
 
-  val wcMonoid: Monoid[WC] = ???
+  val wcMonoid: Monoid[WC] = null
 
   def count(s: String): Int = ???
 
