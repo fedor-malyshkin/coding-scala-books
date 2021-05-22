@@ -11,6 +11,10 @@ Some exercise in Scala (based on books related to Scala)
 ## Books
 
 * [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
+* [Scala with Cats 2](https://www.scalawithcats.com/)
+* [Reactive Messaging Patterns with the Actor Model]()
+* [Functional and Reactive Domain Modeling]()
+* [Reactive Design Patterns]()
 
 ## Run tests
 

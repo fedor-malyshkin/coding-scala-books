@@ -27,7 +27,7 @@ ext {
     SCALA_VER = '2.13'
     SCALA_LIBRARY_VER = '2.13.5'
 
-    CATS_VER = '2.3.1'
+    CATS_VER = '2.5.1'
     CATS_EFFECT_VER = CATS_VER
 
 
