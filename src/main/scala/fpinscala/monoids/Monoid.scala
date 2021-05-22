@@ -1,8 +1,8 @@
 package fpinscala.monoids
 
+import scala.language.higherKinds
+
 import fpinscala.parallelism.Nonblocking._
-import fpinscala.parallelism.Nonblocking.Par.toParOps // infix syntax for `Par.map`, `Par.flatMap`, etc
-import language.higherKinds
 
 trait Monoid[A] {
   def op(a1: A, a2: A): A
@@ -42,7 +42,6 @@ object Monoid {
   // data type from Part 2.
 
   import fpinscala.testing._
-  import Prop._
   def monoidLaws[A](m: Monoid[A], gen: Gen[A]): Prop = ???
 
   def trimMonoid(s: String): Monoid[String] = ???
@@ -66,7 +65,9 @@ object Monoid {
     ???
 
   sealed trait WC
+
   case class Stub(chars: String) extends WC
+
   case class Part(lStub: String, words: Int, rStub: String) extends WC
 
   def par[A](m: Monoid[A]): Monoid[Par[A]] =
@@ -93,7 +94,6 @@ object Monoid {
 }
 
 trait Foldable[F[_]] {
-  import Monoid._
 
   def foldRight[A, B](as: F[A])(z: B)(f: (A, B) => B): B =
     ???

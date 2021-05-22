@@ -70,11 +70,4 @@ class ParTest extends AnyFunSuite {
     par(es12).get() should be(List(2, 4, 6, 8, 10, 12, 14, 16, 18))
 
   }
-
-  ignore("testDelay") {}
-
-  ignore("testToParOps") {}
-
-  ignore("testChoice") {}
-
 }

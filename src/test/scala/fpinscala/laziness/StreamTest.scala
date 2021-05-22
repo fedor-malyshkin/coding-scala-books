@@ -16,32 +16,4 @@ class StreamTest extends AnyFunSuite {
     str.toList should be(List(1, 2, 3))
   }
 
-  test("[5.2] test drop") {}
-
-  test("testHeadOption") {}
-
-  test("testExists") {}
-
-  test("testStartsWith") {}
-
-  test("testTakeWhile") {}
-
-  test("testFoldRight") {}
-
-  test("testFind") {}
-
-  test("testForAll") {}
-
-  test("testEmpty") {}
-
-  test("testOnes") {}
-
-  test("testApply") {}
-
-  test("testFrom") {}
-
-  test("testCons") {}
-
-  test("testUnfold") {}
-
 }
