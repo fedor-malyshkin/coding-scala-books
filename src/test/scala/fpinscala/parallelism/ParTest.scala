@@ -10,11 +10,9 @@ class ParTest extends AnyFunSuite {
 
   test("[7.0] Par") {
     val parUnit = Par.unit {
-      println("Hi from there, unit")
       1
     }
     val parLazyUnit = Par.lazyUnit {
-      println("Hi from there, lazyUnit")
       1
     }
     val es12 = Executors.newFixedThreadPool(12)
@@ -23,7 +21,6 @@ class ParTest extends AnyFunSuite {
 
   test("[7.0] Par hanging") {
     val parLazyUnit = Par.lazyUnit {
-      println("Hi from there, lazyUnit")
       1
     }
     val es1 = Executors.newFixedThreadPool(1)
