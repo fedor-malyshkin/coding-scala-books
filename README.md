@@ -10,8 +10,8 @@ Some exercise in Scala (based on books related to Scala)
 
 ## Books
 
-* [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala)
-* [Scala with Cats 2](https://www.scalawithcats.com/)
+* [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala) _("fpinscala" package)_
+* [Scala with Cats 2](https://www.scalawithcats.com/) _("underscore.cats" package)_
 * [Reactive Messaging Patterns with the Actor Model]()
 * [Functional and Reactive Domain Modeling]()
 * [Reactive Design Patterns]()
