@@ -81,8 +81,8 @@ spotless {
     scala {
         // by default, all `.scala` and `.sc` files in the java sourcesets will be formatted
 
-        // version and configFile are both optional
-        scalafmt('3.0.0-RC1').configFile('.scalafmt.conf')
+        // version and configFile are both optional, however if version will be skipped some strange version will be used
+        scalafmt("3.0.0-RC1").configFile('.scalafmt.conf')
 
         target project.fileTree(project.projectDir) {
             include 'src/main/scala/**/*.scala'
