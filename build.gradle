@@ -30,6 +30,10 @@ ext {
     CATS_VER = '2.5.1'
     CATS_EFFECT_VER = CATS_VER
 
+    // monocle
+    MONOCLE_VER = "3.0.0-M5"
+    MONOCLE_MACRO_VER = MONOCLE_VER
+
 
 // test scala
     SCALA_TEST_VER = '3.2.5'
@@ -66,6 +70,12 @@ dependencies {
     implementation "org.typelevel:cats-core_${SCALA_VER}:${CATS_VER}"
     implementation "org.typelevel:cats-effect_${SCALA_VER}:${CATS_EFFECT_VER}"
 
+    // Monocle
+
+    implementation "com.github.julien-truffaut:monocle-core_${SCALA_VER}:${MONOCLE_VER}"
+    implementation "com.github.julien-truffaut:monocle-macro_${SCALA_VER}:${MONOCLE_MACRO_VER}"
+
+
     // testing (scala)
     testImplementation "org.scalatest:scalatest_${SCALA_VER}:${SCALA_TEST_VER}"
     testImplementation "org.scalamock:scalamock_${SCALA_VER}:${SCALA_MOCK_VER}"
@@ -89,4 +99,8 @@ spotless {
             include 'src/test/scala/**/*.scala'
         }
     }
+}
+
+tasks.withType(ScalaCompile) {
+    scalaCompileOptions.additionalParameters = ["-Ymacro-annotations"]
 }
