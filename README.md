@@ -13,7 +13,7 @@ Some exercise in Scala (based on books related to Scala)
 * [Functional Programming in Scala](https://www.manning.com/books/functional-programming-in-scala) _("fpinscala" package)_
 * [Scala with Cats 2](https://www.scalawithcats.com/) _("underscore.cats" package)_
 * [Functional and Reactive Domain Modeling](https://www.manning.com/books/functional-and-reactive-domain-modeling) _("frdomain" package)_
-* [Reactive Design Patterns]()
+* [Reactive Design Patterns](https://www.manning.com/books/reactive-design-patterns)  _("reactivedesignpatterns" package)_
 * [Reactive Messaging Patterns with the Actor Model]()
 
 ## Run tests
